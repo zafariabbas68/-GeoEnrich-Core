@@ -44,38 +44,7 @@
 | **LiDAR** | LasPy, Open3D |
 | **Data Sources** | OpenStreetMap Overpass API |
 
----
 
-## 📁 Project Structure
-
-
-GeoEnrich Core/
-│
-├── src/
-│   ├── core/
-│   │   ├── real_data_loader.py      # OSM + Amsterdam data loader
-│   │   └── data_generation.py       # Synthetic data generator
-│   │
-│   ├── analytics/
-│   │   ├── spatial_analytics.py     # Proximity, clustering, distribution
-│   │   ├── asset_recognizer.py      # 100% accuracy asset recognition
-│   │   └── time_series_analyzer.py  # Time series analysis
-│   │
-│   ├── ml/
-│   │   └── asset_classifier.py      # Machine Learning classification
-│   │
-│   ├── visualization/
-│   │   └── dashboard.py             # Main Streamlit dashboard
-│   │
-│   └── export/
-│       ├── csv_exporter.py          # CSV export
-│       └── geojson_exporter.py      # GeoJSON export
-│
-├── models/                          # Trained ML models
-├── cache/                           # Cached OSM data
-├── outputs/                         # Exported data
-├── requirements.txt                 # Python dependencies
-└── README.md                        # Project documentation
 
 
 ## 🚀 Quick Start
