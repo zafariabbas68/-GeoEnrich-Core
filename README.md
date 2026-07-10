@@ -9,12 +9,15 @@
 [![OSM](https://img.shields.io/badge/OSM-Integration-green.svg)](https://openstreetmap.org)
 [![ML](https://img.shields.io/badge/ML-RandomForest-purple.svg)](https://scikit-learn.org)
 [![LiDAR](https://img.shields.io/badge/LiDAR-LAS%2FLAZ-orange.svg)](https://laspy.readthedocs.io)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=render)](https://geoenrich-core.onrender.com)
 
 ---
 
 ## 📌 Overview
 
 **GeoEnrich Core** is a production-grade geospatial intelligence platform designed for mobile mapping data processing, asset recognition, and infrastructure intelligence. Built for geospatial engineers, surveyors, and infrastructure managers, it bridges the gap between field data collection and actionable insights.
+
+**🌐 Live Demo:** [https://geoenrich-core.onrender.com](https://geoenrich-core.onrender.com)
 
 ---
 
@@ -30,6 +33,9 @@
 | **📤 Export Capabilities** | CSV, GeoJSON, and Recognition Reports |
 | **☁️ LiDAR Support** | Process LAS/LAZ point cloud files |
 | **📍 Amsterdam Focus** | Real data from Amsterdam infrastructure |
+| **🚗 Routing & Directions** | Find shortest routes and service areas |
+| **⛰️ Elevation Service** | Point elevation and terrain profiles |
+| **🔍 Geocoding & Places** | Address search and point-of-interest discovery |
 
 ---
 
@@ -40,12 +46,51 @@
 | **Backend** | Python 3.11+, Pandas, NumPy, SciPy |
 | **Frontend** | Streamlit, Plotly, Folium |
 | **Machine Learning** | Scikit-learn, RandomForest, Joblib |
-| **Geospatial** | Shapely, PyProj, GeoPandas |
+| **Geospatial** | Shapely, PyProj, GeoPandas, OSMnx |
 | **LiDAR** | LasPy, Open3D |
-| **Data Sources** | OpenStreetMap Overpass API |
+| **Routing** | NetworkX, OSMnx |
+| **Data Sources** | OpenStreetMap Overpass API, Nominatim |
 
+---
 
+## 📁 Project Structure
 
+```text
+GeoEnrich Core/
+│
+├── src/
+│   ├── core/
+│   │   ├── real_data_loader.py      # OSM + Amsterdam data loader
+│   │   ├── data_generation.py       # Synthetic data generator
+│   │   ├── geocoding.py             # Geocoding service
+│   │   ├── routing_analyzer.py      # Routing and directions
+│   │   ├── elevation_service.py     # Elevation queries
+│   │   ├── places_search.py         # POI search
+│   │   └── data_enrichment.py       # Demographic enrichment
+│   │
+│   ├── analytics/
+│   │   ├── spatial_analytics.py     # Proximity, clustering, distribution
+│   │   ├── asset_recognizer.py      # 100% accuracy asset recognition
+│   │   └── time_series_analyzer.py  # Time series analysis
+│   │
+│   ├── ml/
+│   │   └── asset_classifier.py      # Machine Learning classification
+│   │
+│   ├── visualization/
+│   │   └── dashboard.py             # Main Streamlit dashboard
+│   │
+│   └── export/
+│       ├── csv_exporter.py          # CSV export
+│       └── geojson_exporter.py      # GeoJSON export
+│
+├── models/                          # Trained ML models
+├── cache/                           # Cached OSM data
+├── outputs/                         # Exported data
+├── requirements.txt                 # Python dependencies
+└── README.md                        # Project documentation
+```
+
+---
 
 ## 🚀 Quick Start
 
@@ -57,9 +102,9 @@
 
 ### Installation
 
-
+```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/GeoEnrich-Core.git
+git clone https://github.com/zafariabbas68/-GeoEnrich-Core.git
 cd GeoEnrich-Core
 
 # 2. Create virtual environment
@@ -71,14 +116,14 @@ pip install -r requirements.txt
 
 # 4. Run the dashboard
 python -m streamlit run src/visualization/dashboard.py
-
+```
 
 ### Quick Test
 
-
+```bash
 # Test data loading
 python -c "from src.core.real_data_loader import load_amsterdam_data; assets, road, pc = load_amsterdam_data(max_assets=100); print(f'✅ Loaded {len(assets)} assets')"
-
+```
 
 ---
 
@@ -119,6 +164,17 @@ python -c "from src.core.real_data_loader import load_amsterdam_data; assets, ro
 - Export CSV and GeoJSON
 - Recognition reports
 
+### 📍 Geocoding & Places
+- Forward and reverse geocoding
+- Place search by category
+- Nearby points of interest
+
+### 🗺️ Routing & Elevation
+- Shortest route calculation
+- Distance and time estimation
+- Elevation queries
+- Terrain profiles
+
 ---
 
 ## 📦 Data Sources
@@ -148,9 +204,43 @@ python -c "from src.core.real_data_loader import load_amsterdam_data; assets, ro
 
 ---
 
+## 📸 Screenshots
+
+### 🗺️ Map View - Asset Visualization
+
+![Analytics Tab](Analytics%20tab.png)
+
+*Interactive map showing color-coded assets with road network overlay*
+
+---
+
+### 📈 Time Series Analysis
+
+![Asset Changes Over Time](Asset%20changes%20over%20time%20.png)
+
+*Track asset count and height changes over time with trend analysis*
+
+---
+
+### 📍 Geocoding & Places Search
+
+![Geocoding and Places Search](Geocoding%20and%20places%20search.png)
+
+*Search for addresses and discover points of interest*
+
+---
+
+### 🗺️ Routing & Elevation
+
+![Routing and Elevation](Routing%20and%20elevation.png)
+
+*Find shortest routes, calculate distances, and query elevation data*
+
+---
+
 ## 🧪 Testing
 
-
+```bash
 # Test asset recognition
 python -c "from src.analytics.asset_recognizer import AssetRecognizer; print('✅ AssetRecognizer ready')"
 
@@ -159,9 +249,9 @@ python -c "from src.ml.asset_classifier import AssetClassifier; print('✅ ML Cl
 
 # Test OSM connection
 python -c "from src.core.real_data_loader import OSMDataFetcher; fetcher = OSMDataFetcher(); print('✅ OSM ready')"
+```
 
-
-
+---
 
 ## 📈 Performance Metrics
 
@@ -173,7 +263,7 @@ python -c "from src.core.real_data_loader import OSMDataFetcher; fetcher = OSMDa
 | **Map Rendering** | < 1 second |
 | **Supported Asset Types** | 12+ |
 
-
+---
 
 ## 🤝 Contributing
 
@@ -185,7 +275,7 @@ Contributions are welcome! Please:
 4. Push to the branch
 5. Open a Pull Request
 
-
+---
 
 ## 📄 License
 
@@ -210,6 +300,7 @@ This project is licensed under the MIT License.
 - **OpenStreetMap** - Free geospatial data
 - **Streamlit** - Web application framework
 - **Scikit-learn** - Machine learning library
+- **NetworkX** - Routing and network analysis
 
 ---
 
@@ -218,20 +309,9 @@ This project is licensed under the MIT License.
 | Channel | Link |
 |---------|------|
 | **Email** | ghulamabbas.zafari@gmail.com |
-| **GitHub** | [GeoEnrich Core](https://github.com/yourusername/GeoEnrich-Core) |
+| **GitHub** | [GeoEnrich Core](https://github.com/zafariabbas68/-GeoEnrich-Core) |
 | **Live Demo** | [GeoEnrich Core Dashboard](https://geoenrich-core.onrender.com) |
 
 ---
 
-## 📸 Screenshots
-
-### Main Dashboard
-*Coming soon*
-
-### Asset Map View
-*Coming soon*
-
-### Analytics Dashboard
-*Coming soon*
-
-
+**Builtfor Geospatial Intelligence**
