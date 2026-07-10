@@ -6,16 +6,23 @@ Provides forward and reverse geocoding capabilities.
 import pandas as pd
 import requests
 from typing import Optional, Dict, Any, List, Tuple
+import time
 
 
 class GeocodingService:
     """
     Geocoding service for converting addresses to coordinates and vice versa.
+    Uses Nominatim (OpenStreetMap) - free, no API key required.
     """
 
     def __init__(self):
         self.cache = {}
-        self.user_agent = "GeoEnrichCore/1.0"
+        self.user_agent = "GeoEnrichCore/1.0 (geospatial-analysis; +https://github.com/GeoEnrichCore)"
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': self.user_agent,
+            'Accept': 'application/json'
+        })
 
     def geocode_address(self, address: str, country: str = "Netherlands") -> Optional[Dict[str, Any]]:
         """
@@ -28,6 +35,11 @@ class GeocodingService:
         Returns:
             Dictionary with lat, lon, and full address
         """
+        # Clean address
+        address = address.strip()
+        if not address:
+            return None
+
         cache_key = f"{address}_{country}"
         if cache_key in self.cache:
             return self.cache[cache_key]
@@ -39,11 +51,11 @@ class GeocodingService:
                 'q': f"{address}, {country}",
                 'format': 'json',
                 'limit': 1,
-                'addressdetails': 1
+                'addressdetails': 1,
+                'accept-language': 'en'
             }
-            headers = {'User-Agent': self.user_agent}
 
-            response = requests.get(url, params=params, headers=headers, timeout=10)
+            response = self.session.get(url, params=params, timeout=15)
 
             if response.status_code == 200:
                 data = response.json()
@@ -57,8 +69,30 @@ class GeocodingService:
                     self.cache[cache_key] = result
                     return result
 
+            # Try fallback: search without country
+            if country:
+                params['q'] = address
+                response = self.session.get(url, params=params, timeout=15)
+                if response.status_code == 200:
+                    data = response.json()
+                    if data:
+                        result = {
+                            'lat': float(data[0]['lat']),
+                            'lon': float(data[0]['lon']),
+                            'full_address': data[0].get('display_name', address),
+                            'type': data[0].get('type', 'unknown')
+                        }
+                        self.cache[cache_key] = result
+                        return result
+
             return None
 
+        except requests.exceptions.Timeout:
+            print(f"⚠️ Geocoding timeout for: {address}")
+            return None
+        except requests.exceptions.ConnectionError:
+            print(f"⚠️ Geocoding connection error for: {address}")
+            return None
         except Exception as e:
             print(f"⚠️ Geocoding error: {str(e)}")
             return None
@@ -84,11 +118,11 @@ class GeocodingService:
                 'lat': lat,
                 'lon': lon,
                 'format': 'json',
-                'addressdetails': 1
+                'addressdetails': 1,
+                'accept-language': 'en'
             }
-            headers = {'User-Agent': self.user_agent}
 
-            response = requests.get(url, params=params, headers=headers, timeout=10)
+            response = self.session.get(url, params=params, timeout=15)
 
             if response.status_code == 200:
                 data = response.json()
@@ -119,6 +153,7 @@ class GeocodingService:
         results = []
         for address in addresses:
             results.append(self.geocode_address(address))
+            time.sleep(0.5)  # Rate limiting
         return results
 
     def autocomplete(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
@@ -132,17 +167,20 @@ class GeocodingService:
         Returns:
             List of suggestion dictionaries
         """
+        if not query or len(query) < 2:
+            return []
+
         try:
             url = "https://nominatim.openstreetmap.org/search"
             params = {
                 'q': query,
                 'format': 'json',
                 'limit': limit,
-                'addressdetails': 1
+                'addressdetails': 1,
+                'accept-language': 'en'
             }
-            headers = {'User-Agent': self.user_agent}
 
-            response = requests.get(url, params=params, headers=headers, timeout=10)
+            response = self.session.get(url, params=params, timeout=15)
 
             if response.status_code == 200:
                 data = response.json()
@@ -161,3 +199,22 @@ class GeocodingService:
         except Exception as e:
             print(f"⚠️ Autocomplete error: {str(e)}")
             return []
+
+    def clear_cache(self):
+        """Clear the geocoding cache."""
+        self.cache = {}
+        print("🗑️ Geocoding cache cleared")
+
+
+# Convenience function
+def geocode_address(address: str, country: str = "Netherlands") -> Optional[Dict[str, Any]]:
+    """Quick geocode function."""
+    service = GeocodingService()
+    return service.geocode_address(address, country)
+
+
+# Convenience function for reverse geocoding
+def reverse_geocode(lat: float, lon: float) -> Optional[str]:
+    """Quick reverse geocode function."""
+    service = GeocodingService()
+    return service.reverse_geocode(lat, lon)
