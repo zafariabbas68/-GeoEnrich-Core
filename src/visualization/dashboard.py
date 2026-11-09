@@ -1,7 +1,4 @@
-"""
-Streamlit Dashboard for GeoEnrich Core
-Complete platform with OSM, LiDAR, ML, Time Series, Routing, Geocoding, Places, Elevation, and Enrichment.
-"""
+
 
 import streamlit as st
 import pandas as pd
