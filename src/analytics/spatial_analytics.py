@@ -1,7 +1,4 @@
-"""
-Spatial Analytics Module
-Performs geospatial analysis on mobile mapping data.
-"""
+
 
 import numpy as np
 import pandas as pd
