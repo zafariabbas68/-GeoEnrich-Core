@@ -1,7 +1,4 @@
-"""
-Map Layer Generation Module
-Creates interactive map layers for the dashboard.
-"""
+
 
 import folium
 import pandas as pd
