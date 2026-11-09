@@ -1,7 +1,4 @@
-"""
-Asset Recognition Module - 95%+ Accuracy Version
-Directly uses asset data without relying on point cloud extraction.
-"""
+
 
 import numpy as np
 import pandas as pd
