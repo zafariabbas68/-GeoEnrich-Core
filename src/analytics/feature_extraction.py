@@ -1,6 +1,5 @@
 """
 Feature Extraction Module
-Extracts geometric and statistical features from point cloud data.
 """
 
 import numpy as np
