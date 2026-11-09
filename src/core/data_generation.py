@@ -1,7 +1,4 @@
-"""
-Synthetic Data Generation for Mobile Mapping Simulation
-Creates realistic street-level point cloud and infrastructure asset data.
-"""
+
 
 import numpy as np
 import pandas as pd
